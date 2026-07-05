@@ -18,6 +18,12 @@
         "version": ""
       },
       {
+        "type": "panel",
+        "id": "gauge",
+        "name": "Gauge",
+        "version": ""
+      },
+      {
         "type": "grafana",
         "id": "grafana",
         "name": "Grafana",
@@ -64,6 +70,7 @@
         }
       ]
     },
+    "description": "Message statistics and server health of Mirth Connect instances, scraped by the mirth-prometheus-exporter.",
     "editable": true,
     "fiscalYearStartMonth": 0,
     "graphTooltip": 0,
@@ -76,6 +83,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Time of the last received message on the selected channels.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -133,7 +141,7 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "floor(increase(mirth_messages_received_total{channelName=\"$channelName\", exported_instance=~\"$mirthInstance\"}[$__rate_interval])) > 0",
+            "expr": "floor(increase(mirth_messages_received_total{channelName=~\"$channelName\", exported_instance=~\"$mirthInstance\"}[$__rate_interval])) > 0",
             "legendFormat": "__auto",
             "range": true,
             "refId": "A"
@@ -148,7 +156,700 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 6
+          "y": 3
+        },
+        "id": 130,
+        "panels": [],
+        "repeat": "mirthInstance",
+        "repeatDirection": "h",
+        "title": "$mirthInstance Server Health",
+        "type": "row"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [
+              {
+                "options": {
+                  "0": {
+                    "color": "red",
+                    "index": 1,
+                    "text": "DOWN"
+                  },
+                  "1": {
+                    "color": "green",
+                    "index": 0,
+                    "text": "UP"
+                  }
+                },
+                "type": "value"
+              }
+            ],
+            "noValue": "N/A",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 0,
+          "y": 4
+        },
+        "id": 131,
+        "options": {
+          "colorMode": "background",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_server_state{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Server State",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "unknown",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 3,
+          "y": 4
+        },
+        "id": 132,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "name",
+          "wideLayout": true
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_server_info{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "{{version}}",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Mirth Version",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 6,
+          "y": 4
+        },
+        "id": 133,
+        "options": {
+          "colorMode": "none",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_channels_total{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Channels",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "description": "Number of deployed channels per state.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "text",
+                  "value": null
+                }
+              ]
+            }
+          },
+          "overrides": [
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Started"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "green",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Paused"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "yellow",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            },
+            {
+              "matcher": {
+                "id": "byName",
+                "options": "Stopped"
+              },
+              "properties": [
+                {
+                  "id": "color",
+                  "value": {
+                    "fixedColor": "red",
+                    "mode": "fixed"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 9,
+          "y": 4
+        },
+        "id": 134,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "value_and_name",
+          "wideLayout": true
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "count(mirth_channel_state{exported_instance=~\"$mirthInstance\", state=\"STARTED\"} == 1) or vector(0)",
+            "legendFormat": "Started",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "count(mirth_channel_state{exported_instance=~\"$mirthInstance\", state=\"PAUSED\"} == 1) or vector(0)",
+            "legendFormat": "Paused",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "count(mirth_channel_state{exported_instance=~\"$mirthInstance\", state=\"STOPPED\"} == 1) or vector(0)",
+            "legendFormat": "Stopped",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "Channel States",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "description": "Channels that have saved revisions which are not deployed yet (deployed revision delta > 0).",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "noValue": "0",
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 1
+                }
+              ]
+            }
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 3,
+          "x": 13,
+          "y": 4
+        },
+        "id": 135,
+        "options": {
+          "colorMode": "value",
+          "graphMode": "none",
+          "justifyMode": "auto",
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showPercentChange": false,
+          "text": {},
+          "textMode": "auto",
+          "wideLayout": true
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "count(mirth_channel_deployed_revision_delta{exported_instance=~\"$mirthInstance\"} > 0) or vector(0)",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Modified Since Deploy",
+        "type": "stat"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "description": "CPU usage as reported by the Mirth API.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 75
+                },
+                {
+                  "color": "red",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 16,
+          "y": 4
+        },
+        "id": 136,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_cpu_usage_percent{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "CPU Usage",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "description": "Used disk space on the Mirth server.",
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "mappings": [],
+            "max": 100,
+            "min": 0,
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                },
+                {
+                  "color": "yellow",
+                  "value": 80
+                },
+                {
+                  "color": "red",
+                  "value": 90
+                }
+              ]
+            },
+            "unit": "percent"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 5,
+          "w": 4,
+          "x": 20,
+          "y": 4
+        },
+        "id": 137,
+        "options": {
+          "minVizHeight": 75,
+          "minVizWidth": 75,
+          "orientation": "auto",
+          "reduceOptions": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "fields": "",
+            "values": false
+          },
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true,
+          "sizing": "auto"
+        },
+        "pluginVersion": "10.4.0",
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "100 * (1 - mirth_disk_free_bytes{exported_instance=~\"$mirthInstance\"} / mirth_disk_total_bytes{exported_instance=~\"$mirthInstance\"})",
+            "legendFormat": "__auto",
+            "range": true,
+            "refId": "A"
+          }
+        ],
+        "title": "Disk Usage",
+        "type": "gauge"
+      },
+      {
+        "datasource": {
+          "type": "prometheus",
+          "uid": "${DS_PROMETHEUS}"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "palette-classic"
+            },
+            "custom": {
+              "axisBorderShow": false,
+              "axisCenteredZero": false,
+              "axisColorMode": "text",
+              "axisLabel": "",
+              "axisPlacement": "auto",
+              "barAlignment": 0,
+              "drawStyle": "line",
+              "fillOpacity": 10,
+              "gradientMode": "none",
+              "hideFrom": {
+                "legend": false,
+                "tooltip": false,
+                "viz": false
+              },
+              "insertNulls": false,
+              "lineInterpolation": "smooth",
+              "lineWidth": 1,
+              "pointSize": 5,
+              "scaleDistribution": {
+                "type": "linear"
+              },
+              "showPoints": "auto",
+              "spanNulls": false,
+              "stacking": {
+                "group": "A",
+                "mode": "none"
+              },
+              "thresholdsStyle": {
+                "mode": "off"
+              }
+            },
+            "mappings": [],
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {
+                  "color": "green",
+                  "value": null
+                }
+              ]
+            },
+            "unit": "bytes"
+          },
+          "overrides": []
+        },
+        "gridPos": {
+          "h": 6,
+          "w": 24,
+          "x": 0,
+          "y": 9
+        },
+        "id": 138,
+        "options": {
+          "legend": {
+            "calcs": [
+              "lastNotNull"
+            ],
+            "displayMode": "table",
+            "placement": "right",
+            "showLegend": true
+          },
+          "tooltip": {
+            "mode": "multi",
+            "sort": "none"
+          }
+        },
+        "targets": [
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_memory_allocated_bytes{exported_instance=~\"$mirthInstance\"} - mirth_memory_free_bytes{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "Used",
+            "range": true,
+            "refId": "A"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_memory_allocated_bytes{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "Allocated",
+            "range": true,
+            "refId": "B"
+          },
+          {
+            "datasource": {
+              "type": "prometheus",
+              "uid": "${DS_PROMETHEUS}"
+            },
+            "editorMode": "code",
+            "expr": "mirth_memory_max_bytes{exported_instance=~\"$mirthInstance\"}",
+            "legendFormat": "Max",
+            "range": true,
+            "refId": "C"
+          }
+        ],
+        "title": "JVM Memory",
+        "type": "timeseries"
+      },
+      {
+        "collapsed": false,
+        "gridPos": {
+          "h": 1,
+          "w": 24,
+          "x": 0,
+          "y": 15
         },
         "id": 121,
         "panels": [],
@@ -162,6 +863,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Messages received on the selected channels within the dashboard time range.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -186,7 +888,7 @@
           "h": 3,
           "w": 6,
           "x": 0,
-          "y": 7
+          "y": 16
         },
         "id": 105,
         "options": {
@@ -196,7 +898,7 @@
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
-              "sum"
+              "lastNotNull"
             ],
             "fields": "",
             "values": false
@@ -217,9 +919,10 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (exported_instance, channelName) (mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} - mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} offset $__interval) > 0\r\n",
+            "expr": "sum(increase(mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__range]))",
+            "instant": true,
             "legendFormat": "__auto",
-            "range": true,
+            "range": false,
             "refId": "A"
           }
         ],
@@ -231,6 +934,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Messages sent on the selected channels within the dashboard time range.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -255,7 +959,7 @@
           "h": 3,
           "w": 5,
           "x": 6,
-          "y": 7
+          "y": 16
         },
         "id": 77,
         "options": {
@@ -265,7 +969,7 @@
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
-              "sum"
+              "lastNotNull"
             ],
             "fields": "",
             "values": false
@@ -286,9 +990,10 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (exported_instance, channelName) (mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} - mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} offset $__interval) > 0\r\n",
+            "expr": "sum(increase(mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__range]))",
+            "instant": true,
             "legendFormat": "__auto",
-            "range": true,
+            "range": false,
             "refId": "A"
           }
         ],
@@ -300,6 +1005,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Messages filtered on the selected channels within the dashboard time range.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -324,7 +1030,7 @@
           "h": 3,
           "w": 4,
           "x": 11,
-          "y": 7
+          "y": 16
         },
         "id": 84,
         "options": {
@@ -334,7 +1040,7 @@
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
-              "sum"
+              "lastNotNull"
             ],
             "fields": "",
             "values": false
@@ -355,9 +1061,10 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (exported_instance, channelName) (mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} - mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} offset $__interval) > 0\r\n",
+            "expr": "sum(increase(mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__range]))",
+            "instant": true,
             "legendFormat": "__auto",
-            "range": true,
+            "range": false,
             "refId": "A"
           }
         ],
@@ -369,6 +1076,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Messages that errored on the selected channels within the dashboard time range.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -382,6 +1090,10 @@
                 {
                   "color": "green",
                   "value": null
+                },
+                {
+                  "color": "red",
+                  "value": 1
                 }
               ]
             },
@@ -393,17 +1105,17 @@
           "h": 3,
           "w": 4,
           "x": 15,
-          "y": 7
+          "y": 16
         },
         "id": 98,
         "options": {
-          "colorMode": "none",
+          "colorMode": "value",
           "graphMode": "none",
           "justifyMode": "auto",
           "orientation": "auto",
           "reduceOptions": {
             "calcs": [
-              "sum"
+              "lastNotNull"
             ],
             "fields": "",
             "values": false
@@ -424,9 +1136,10 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (exported_instance, channelName) (mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} - mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"} offset $__interval) > 0\r\n",
+            "expr": "sum(increase(mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__range]))",
+            "instant": true,
             "legendFormat": "__auto",
-            "range": true,
+            "range": false,
             "refId": "A"
           }
         ],
@@ -438,6 +1151,7 @@
           "type": "prometheus",
           "uid": "${DS_PROMETHEUS}"
         },
+        "description": "Messages currently queued on the selected channels.",
         "fieldConfig": {
           "defaults": {
             "color": {
@@ -462,7 +1176,7 @@
           "h": 3,
           "w": 5,
           "x": 19,
-          "y": 7
+          "y": 16
         },
         "id": 91,
         "options": {
@@ -493,9 +1207,10 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by(exported_instance, channelName) (mirth_messages_queued{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"})",
+            "expr": "sum(mirth_messages_queued{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"})",
+            "instant": true,
             "legendFormat": "__auto",
-            "range": true,
+            "range": false,
             "refId": "A"
           }
         ],
@@ -508,7 +1223,7 @@
           "h": 1,
           "w": 24,
           "x": 0,
-          "y": 10
+          "y": 19
         },
         "id": 25,
         "panels": [],
@@ -553,10 +1268,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             },
@@ -568,7 +1279,7 @@
           "h": 8,
           "w": 6,
           "x": 0,
-          "y": 11
+          "y": 20
         },
         "id": 123,
         "interval": "1h",
@@ -601,8 +1312,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (time) (mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval)",
-            "legendFormat": "{{time}}",
+            "expr": "sum(increase(mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__interval]))",
+            "legendFormat": "Received",
             "range": true,
             "refId": "A"
           }
@@ -660,10 +1371,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -674,7 +1381,7 @@
           "h": 8,
           "w": 18,
           "x": 6,
-          "y": 11
+          "y": 20
         },
         "id": 4,
         "options": {
@@ -698,8 +1405,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval",
-            "legendFormat": "{{exported_instance}}",
+            "expr": "increase(mirth_messages_received_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__rate_interval])",
+            "legendFormat": "{{channelName}} ({{exported_instance}})",
             "range": true,
             "refId": "A"
           }
@@ -745,10 +1452,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             },
@@ -760,7 +1463,7 @@
           "h": 8,
           "w": 6,
           "x": 0,
-          "y": 19
+          "y": 28
         },
         "id": 124,
         "interval": "1h",
@@ -793,8 +1496,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (time) (mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval)",
-            "legendFormat": "{{time}}",
+            "expr": "sum(increase(mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__interval]))",
+            "legendFormat": "Sent",
             "range": true,
             "refId": "A"
           }
@@ -852,10 +1555,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -866,7 +1565,7 @@
           "h": 8,
           "w": 18,
           "x": 6,
-          "y": 19
+          "y": 28
         },
         "id": 5,
         "options": {
@@ -890,8 +1589,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval",
-            "legendFormat": "{{exported_instance}}",
+            "expr": "increase(mirth_messages_sent_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__rate_interval])",
+            "legendFormat": "{{channelName}} ({{exported_instance}})",
             "range": true,
             "refId": "A"
           }
@@ -937,10 +1636,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             },
@@ -952,7 +1647,7 @@
           "h": 8,
           "w": 6,
           "x": 0,
-          "y": 27
+          "y": 36
         },
         "id": 125,
         "interval": "1h",
@@ -985,8 +1680,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (time) (mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval)",
-            "legendFormat": "{{time}}",
+            "expr": "sum(increase(mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__interval]))",
+            "legendFormat": "Errored",
             "range": true,
             "refId": "A"
           }
@@ -1044,10 +1739,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -1058,7 +1749,7 @@
           "h": 8,
           "w": 18,
           "x": 6,
-          "y": 27
+          "y": 36
         },
         "id": 6,
         "options": {
@@ -1082,8 +1773,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval",
-            "legendFormat": "{{exported_instance}}",
+            "expr": "increase(mirth_messages_errored_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__rate_interval])",
+            "legendFormat": "{{channelName}} ({{exported_instance}})",
             "range": true,
             "refId": "A"
           }
@@ -1129,10 +1820,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             },
@@ -1144,7 +1831,7 @@
           "h": 8,
           "w": 6,
           "x": 0,
-          "y": 35
+          "y": 44
         },
         "id": 127,
         "interval": "1h",
@@ -1177,8 +1864,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "sum by (time) (mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval)",
-            "legendFormat": "{{time}}",
+            "expr": "sum(increase(mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__interval]))",
+            "legendFormat": "Filtered",
             "range": true,
             "refId": "A"
           }
@@ -1236,10 +1923,6 @@
                 {
                   "color": "green",
                   "value": null
-                },
-                {
-                  "color": "red",
-                  "value": 80
                 }
               ]
             }
@@ -1250,7 +1933,7 @@
           "h": 8,
           "w": 18,
           "x": 6,
-          "y": 35
+          "y": 44
         },
         "id": 126,
         "options": {
@@ -1274,8 +1957,8 @@
               "uid": "${DS_PROMETHEUS}"
             },
             "editorMode": "code",
-            "expr": "mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} - mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=\"$channelName\"} offset $__interval",
-            "legendFormat": "{{exported_instance}}",
+            "expr": "increase(mirth_messages_filtered_total{exported_instance=~\"$mirthInstance\", channelName=~\"$channelName\"}[$__rate_interval])",
+            "legendFormat": "{{channelName}} ({{exported_instance}})",
             "range": true,
             "refId": "A"
           }
@@ -1284,10 +1967,13 @@
         "type": "timeseries"
       }
     ],
-    "refresh": "",
+    "refresh": "1m",
     "revision": 1,
     "schemaVersion": 39,
-    "tags": [],
+    "tags": [
+      "mirth",
+      "prometheus"
+    ],
     "templating": {
       "list": [
         {
@@ -1299,9 +1985,9 @@
           "definition": "label_values(mirth_server_state,exported_instance)",
           "description": "Mirth Instance from prometheus",
           "hide": 0,
-          "includeAll": false,
+          "includeAll": true,
           "label": "Instance",
-          "multi": false,
+          "multi": true,
           "name": "mirthInstance",
           "options": [],
           "query": {
@@ -1321,102 +2007,23 @@
             "type": "prometheus",
             "uid": "${DS_PROMETHEUS}"
           },
-          "definition": "label_values(mirth_messages_received_total{exported_instance=\"$mirthInstance\"},channelName)",
+          "definition": "label_values(mirth_messages_received_total{exported_instance=~\"$mirthInstance\"},channelName)",
           "hide": 0,
-          "includeAll": false,
+          "includeAll": true,
           "label": "Channel",
-          "multi": false,
+          "multi": true,
           "name": "channelName",
           "options": [],
           "query": {
             "qryType": 1,
-            "query": "label_values(mirth_messages_received_total{exported_instance=\"$mirthInstance\"},channelName)",
+            "query": "label_values(mirth_messages_received_total{exported_instance=~\"$mirthInstance\"},channelName)",
             "refId": "PrometheusVariableQueryEditor-VariableQuery"
           },
           "refresh": 1,
           "regex": "",
           "skipUrlSync": false,
-          "sort": 0,
+          "sort": 1,
           "type": "query"
-        },
-        {
-          "auto": true,
-          "auto_count": 30,
-          "auto_min": "2m",
-          "current": {
-            "selected": true,
-            "text": "auto",
-            "value": "$__auto_interval_interval"
-          },
-          "hide": 0,
-          "name": "interval",
-          "options": [
-            {
-              "selected": true,
-              "text": "auto",
-              "value": "$__auto_interval_interval"
-            },
-            {
-              "selected": false,
-              "text": "2m",
-              "value": "2m"
-            },
-            {
-              "selected": false,
-              "text": "5m",
-              "value": "5m"
-            },
-            {
-              "selected": false,
-              "text": "10m",
-              "value": "10m"
-            },
-            {
-              "selected": false,
-              "text": "30m",
-              "value": "30m"
-            },
-            {
-              "selected": false,
-              "text": "1h",
-              "value": "1h"
-            },
-            {
-              "selected": false,
-              "text": "6h",
-              "value": "6h"
-            },
-            {
-              "selected": false,
-              "text": "12h",
-              "value": "12h"
-            },
-            {
-              "selected": false,
-              "text": "1d",
-              "value": "1d"
-            },
-            {
-              "selected": false,
-              "text": "7d",
-              "value": "7d"
-            },
-            {
-              "selected": false,
-              "text": "14d",
-              "value": "14d"
-            },
-            {
-              "selected": false,
-              "text": "30d",
-              "value": "30d"
-            }
-          ],
-          "query": "2m,5m,10m,30m,1h,6h,12h,1d,7d,14d,30d",
-          "queryValue": "",
-          "refresh": 2,
-          "skipUrlSync": false,
-          "type": "interval"
         }
       ]
     },
@@ -1428,6 +2035,6 @@
     "timezone": "",
     "title": "Channel Statistics",
     "uid": "mPHmNKzIz",
-    "version": 10,
+    "version": 11,
     "weekStart": ""
   }
